@@ -3,6 +3,7 @@
 import logging
 from typing import Any, override
 
+import torch
 from chromadb.utils import embedding_functions
 from pydantic import BaseModel
 
@@ -68,9 +69,9 @@ class BaseRAG(RAGMethodInterface):
         self.batch_size_query = config.batch_size_query
         self.client = self.init_db()
 
-    def get_embedding_model(self, name: str, device: str = "cuda") -> Any:
+    def get_embedding_model(self, name: str, device: str = "cuda" if torch.cuda.is_available() else "cpu") -> Any:
         """Return embedding model based on name."""
-        # TODO: Add support for other embedding models in the future.
+        
         # key_map = {
         #     "Google": (
         #         "GOOGLE_API_KEY",
